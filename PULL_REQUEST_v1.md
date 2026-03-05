@@ -21,8 +21,8 @@
 
 ## Attachments / References
 - Issue draft: `ISSUE_PROPOSAL.md`
-- Founder companion guide: `docs/install/founder-companion.md`
-- Drop-in Docker note: `docs/install/docker.md`
+- Founder companion sections now inline in `docs/install/docker.md`
+- Status decoder reference: `docs/install/status-playbook.md`
 - Gap analysis appendix: `docs/install/official-gap-analysis.md`
 
 ## Looking ahead (tooling teaser)

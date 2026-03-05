@@ -5,7 +5,7 @@ _Phase 1 (Repo initialization + pain capture) 已完成；下列阶段从 Phase 
 ## Phase 2 — Clarity Layer / Founder Install Journey
 - **目标**：把真实踩坑转化为「创始人式安装体验」，让新人能“看得见灯塔”。
 - **交付物**：
-  - `docs/install/founder-companion.md`（创始人首小时体验、状态对照表、及时安抚文案）。
+  - `docs/install/docker.md`（创始人 Global Compass、状态对照、平台 runbook 注入官方章节）。
   - 状态/日志词典：`docs/install/status-playbook.md`（health: starting、gateway restarting 等）。
   - 结构化痛点速查：`raw_data/logs/` 持续补充现场案例。
 - **关键动作**：整理真实日志 → 场景化脚本 → 插入“预判 + 操作”提示。

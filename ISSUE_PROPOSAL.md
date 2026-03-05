@@ -12,6 +12,8 @@
 | `/docs/install/docker.md` 在附录里轻描淡写一句 “docker compose 要在 repo root 跑”。 | Docker 主章节和快速开始都嵌入“Repo vs Data root”提示 + Shell guard snippet，防止误入 `~/.openclaw`。 |
 | `gateway restarting` 循环在官方文档没有任何释义。 | Status Decoder 把该日志明确标记为 “Config lint failure”，并附 rollback 步骤 + `config-guard.sh` 用法。 |
 
+![Clarity before-after](docs/assets/clarity-before-after.svg)
+
 ## Structural Blind Spots (with evidence)
 
 ### 1. Subagent auth isolation silently desyncs credentials
@@ -51,4 +53,4 @@
 
 ## Links
 - Supporting logs: [`raw_data/logs/auth_error_original.md`](./raw_data/logs/auth_error_original.md)
-- Draft mitigation guides: `docs/install/founder-companion.md`, `docs/install/status-playbook.md`, `docs/install/phase4-protocols.md`
+- Draft mitigation guides: `docs/install/docker.md`, `docs/install/status-playbook.md`, `docs/install/phase4-protocols.md`
