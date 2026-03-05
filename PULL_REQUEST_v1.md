@@ -7,6 +7,11 @@
 - Scope: documentation-only uplift (no code or runtime changes) to surface the Phase 4 Founder safeguards — Global Compass pre-flight, Status Decoder, Safe-Reload, and Docker path guardrails.
 - Intent: unblock official reviewers by presenting production evidence (raw founder logs) and ready-to-merge markdown modules that slot directly into `/docs/install/docker.md` and related guides. Risk profile is effectively zero because we only add narrative and callouts.
 
+### Quick win snapshot
+- Expect fewer “subagent auth” tickets — the checklist moves FAQ 2288 to the install chapter.
+- Expect fewer Docker-compose misfires — repo/data split warnings now appear in quick start + troubleshooting.
+- Expect faster config triage — `gateway restarting` now points to lint/rollback instructions instead of leaving founders guessing.
+
 ## Maintenance assurance
 - The patch is intentionally decoupled from rapidly changing UI/CLI flows. It documents static path logic and auth store behavior that already exists in the FAQ (e.g., `/help/faq.md` line 2288) and installer steps, so upkeep is limited to structural changes—not screenshots or per-release strings.
 - Each section cites the upstream source of truth (FAQ, install/docker) so future edits by maintainers automatically surface in the same files we touch.
