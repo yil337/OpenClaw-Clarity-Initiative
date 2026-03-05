@@ -17,6 +17,37 @@ _This is the "friend sitting next to you" guide. No jargon dumps, just what to e
 | 3-4 | Gateway starts; Control UI token printed. | Logs show `health: starting`, `gateway restarting`. | **Do not panic**—see Status Playbook. |
 | 4-5 | Paste token into Control UI → Approve device. | Browser connects, you see dashboard. | Celebrate. Then snapshot your working state (`git status`, `openclaw doctor`). |
 
+## Global Compass — Pre-flight checklists
+Use these before you touch the installer; check every box to avoid 80% 的血泪。
+
+#### Apple Silicon (M1–M4)
+- [ ] `softwareupdate --install-rosetta --agree-to-license` 已成功（只需一次）。
+- [ ] Docker Desktop 打开且状态为 **Running**（Whale 图标稳定）。
+- [ ] `diskutil info / | grep "Free Space"` 显示剩余 ≥ 15 GB。
+- [ ] 终端已获“完全磁盘访问权”（System Settings → Privacy & Security）。
+- [ ] `openclaw --version` 若不存在，已确认 PATH 不会被旧 bashrc 覆盖。
+
+#### Intel Mac
+- [ ] 执行 `brew update && brew upgrade` 无错误。
+- [ ] `xcode-select --install`（若提示“already installed”即可）。
+- [ ] 机器接入电源（安装期间风扇会飙）。
+- [ ] Docker Desktop 已启动 + Resources 分配 ≥ 4 CPU / 6 GB RAM。
+- [ ] `sysctl -n machdep.cpu.brand_string` 输出确认是 Intel（用于后续文档提示）。
+
+#### Linux / VPS
+- [ ] `whoami` 的用户具备 sudo 权限（`sudo -n true` 不报错最好）。
+- [ ] `locale` 中 `LANG` 含 `UTF-8`，无 `POSIX`/`C` 残留。
+- [ ] `df -h ~` 显示剩余 ≥ 10 GB。
+- [ ] 如果要跑 Docker：`docker info` 返回成功且 `docker ps` 可执行。
+- [ ] 开放的端口（18789/ gateway) 未被其他服务占用（`ss -ltnp | grep 18789`）。
+
+#### Windows / WSL2
+- [ ] 已安装 WSL2 (`wsl --status` 显示 version 2) 且 Ubuntu 发行版就绪。
+- [ ] `wsl -l -v` 中目标发行版状态为 Running。
+- [ ] Windows Terminal / VS Code 连接到 WSL 内部路径（非 `/mnt/c`）。
+- [ ] Windows 端已启用 "Developer Mode" + "Long Paths"，避免 git 报错。
+- [ ] 浏览器已登录 GitHub，方便稍后授权。
+
 ## Platform runbooks
 
 ### Apple Silicon (M1/M2/M3/M4)

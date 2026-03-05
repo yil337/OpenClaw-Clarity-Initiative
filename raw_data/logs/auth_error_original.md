@@ -11,3 +11,20 @@
 ## Case 3: JSON Schema Suicide (自毁逻辑)
 - **Phenomenon:** 修改 `openclaw.json` 后 Gateway 陷入无限重启循环。
 - **Root Cause:** 误将 `approvals` 键位放入 `agents.defaults` 导致 `Unrecognized key` 报错，系统缺乏容错直接宕机。
+
+### Log excerpts (Founder terminal captures)
+
+#### Connection Refused Loop
+```
+[2026-03-05T01:32:11.021Z] control-ui WARN gateway: connect ECONNREFUSED 127.0.0.1:18789
+curl: (7) Failed to connect to 127.0.0.1 port 18789: Connection refused
+openclaw dashboard --no-open
+  →  Error: HTTP 599 (connection refused)
+```
+
+#### Token Mismatch Spiral
+```
+[2026-03-05T01:34:55.886Z] control-ui WARN websocket: disconnected (1008): token mismatch
+[2026-03-05T01:34:56.112Z] control-ui INFO reconnect scheduled in 5s
+browser console: WebSocket close code 1008 — token mismatch / expired
+```
