@@ -1,8 +1,7 @@
-# Docker Installation (Reference Extract)
-
-> **Context:** This file mirrors the structure of the upstream `/docs/install/docker.md` chapter so reviewers can see exactly where the Phase 4 note slots in. Replace the placeholder text above the callout with the real Docker instructions when preparing the PR.
-
-<!-- existing docker setup narrative lives above -->
+---
+summary: "Phase 4 addition: Apple Silicon / M4 note for Docker installs"
+title: "Docker — Apple Silicon Note"
+---
 
 ## Note for Apple Silicon / M4 Users
 - **Run the Global Compass first:** Confirm Rosetta, disk space (≥15 GB), Docker Desktop running, and Terminal Full Disk Access (see [Global Compass](../clarity-layer/INSTALL_FOUNDERS.md#module-1--global-compass-pre-flight)).
