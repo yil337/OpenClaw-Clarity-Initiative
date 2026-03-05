@@ -1,20 +1,20 @@
-# Official Docs vs Phase 4 Issue -- Gap Analysis (2026-03-05)
+# Official Docs vs Install Safeguard Issue -- Gap Analysis (2026-03-05)
 
 ## Snapshot
-| Structural topic | What the official docs currently say | Coverage gaps vs our Phase 4 issue | Evidence refs |
+| Structural topic | What the official docs currently say | Coverage gaps vs our installation safeguard proposal | Evidence refs |
 | --- | --- | --- | --- |
 | **Subagent auth isolation** | `help/faq.md` explains that each agent stores its own `auth-profiles.json` and suggests copying the file from the main agent when `No API key found for provider` appears. | Guidance is reactive and buried in FAQ. No proactive checklist, no mention of hash-compare or auto-sync expectations, and nothing inside the install/onboarding docs. | `/app/docs/help/faq.md` lines 2288-2335. |
-| **Docker path shadowing** | `install/docker.md` mentions (once, near the "Manual flow" section) that `docker compose` must run from the repo root. | Callout appears after dozens of sections; installers and quick-start steps never warn about repo vs `~/.openclaw`. No guard snippet or troubleshooting pointer, so founders still run compose from the data dir. | `/app/docs/install/docker.md` ("Manual flow" note). |
+| **Docker path shadowing** | `install/docker.md` mentions (once, near the "Manual flow" section) that `docker compose` must run from the repo root. | Callout appears after dozens of sections; installers and quick-start steps never warn about repo vs `~/.openclaw`. No guard snippet or troubleshooting pointer, so operators still run compose from the data dir. | `/app/docs/install/docker.md` ("Manual flow" note). |
 | **Config hot-reload suicide** | No mention of linting/rollback safeguards for `openclaw.json`. Troubleshooting pages do not cover `gateway restarting` loops triggered by schema errors. | Entirely undocumented: no dry-run recommendation, no mention of backups, no reference to `config guard` workflows. This is the largest gap we highlight in the issue. | No matches for `"config lint"`, `"openclaw.json" lint`, or `"gateway restarting"` across `/app/docs`. |
 | **Global Compass / platform pre-flight** | Official install docs list high-level requirements (Node, Docker) but lack platform-specific pre-flight checklists (Rosetta, Full Disk Access, WSL placement). | Our issue asks for structured pre-flight (Global Compass) and platform runbooks; nothing equivalent exists today. | `/app/docs/install/*.md`, `/app/docs/start/*.md` -- no platform-specific checklist sections. |
-| **Status Decoder / log meaning** | Status/health references are scattered (e.g., Docker health check). No consolidated "Status Playbook" explaining `gateway restarting`, `token mismatch`, etc. | Issue proposes surfacing log decoder + health graph; official docs don't have a one-glance chart founders can follow. | `/app/docs/debug`, `/app/docs/help/faq.md` -- no dedicated status table. |
+| **Status Decoder / log meaning** | Status/health references are scattered (e.g., Docker health check). No consolidated "Status Playbook" explaining `gateway restarting`, `token mismatch`, etc. | Issue proposes surfacing log decoder + health graph; official docs don't have a one-glance chart operators can follow. | `/app/docs/debug`, `/app/docs/help/faq.md` -- no dedicated status table. |
 
 ## Deep dives
 
 ### 1. Subagent auth isolation
 - **Official stance:** In `help/faq.md` (see `/app/docs/help/faq.md` lines 2288-2335) the FAQ states: "Auth is per-agent ... stored in `~/.openclaw/agents/<agentId>/agent/auth-profiles.json` ... copy `auth-profiles.json` from the main agent's `agentDir` into the new agent's `agentDir`."
 - **Gaps vs issue:**
-  - Advice only surfaces after a failure string (`No API key found...`). Nothing in install/onboarding warns founders that every subagent needs explicit auth sync.
+  - Advice only surfaces after a failure string (`No API key found...`). Nothing in install/onboarding warns operators that every subagent needs explicit auth sync.
   - No automation expectations: official docs normalize manual copying rather than endorsing a hash-sync or symlink workflow.
   - The FAQ section is deeply nested; new users following install docs won't see it.
 - **Implication for issue:** Our GitHub issue should contrast this reactive FAQ guidance with the proposed Credential Auto-Sync protocol + documentation callouts in install/platform pages.
@@ -40,11 +40,11 @@
 - **Gaps vs issue:**
   - Apple Silicon steps such as installing Rosetta or granting disk access are not mentioned.
   - WSL instructions don't warn against running inside `/mnt/c`.
-  - No single page consolidates the pre-flight checklists founders keep recreating.
+  - No single page consolidates the pre-flight checklists operators keep recreating.
 - **Implication:** Our "Global Compass" module is net-new content.
 
 ### 5. Status Playbook / health decoder
-- **Official stance:** Health endpoints (`/healthz`, `/readyz`) are documented, but there's no founder-facing table translating repeating log phrases (`token mismatch`, `gateway restarting`, etc.).
+- **Official stance:** Health endpoints (`/healthz`, `/readyz`) are documented, but there's no operator-facing table translating repeating log phrases (`token mismatch`, `gateway restarting`, etc.).
 - **Gaps vs issue:**
   - Troubleshooting relies on ad-hoc `openclaw doctor` suggestions.
   - No layered status graph for Docker -> gateway -> auth -> sandbox.

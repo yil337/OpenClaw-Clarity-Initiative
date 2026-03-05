@@ -1,4 +1,4 @@
-# Clarity Layer Protocols (Phase 3 Draft)
+# Clarity Layer Protocols (Automation Draft)
 
 These are the standards we want upstream OpenClaw to adopt. Each protocol turns a recurring pain point into a deterministic workflow.
 
@@ -14,12 +14,12 @@ These are the standards we want upstream OpenClaw to adopt. Each protocol turns 
   - Support opt-out via config for advanced users, default to `on` for all first-party agents.
   - Include telemetry: record `authSyncStatus={"agentId":"<id>","result":"copied"|"skipped"|"failed"}` in gateway logs.
 - **Success criteria:**
-  - Founders never see `No API key` on first launch if the main agent has creds.
+  - Operators never see `No API key` on first launch if the main agent has creds.
   - `openclaw doctor` gains a check that asserts `synced=true` for every configured subagent.
 
 ## 2. Safe-Reload Protocol
 - **Origin:** Case 3 -- JSON Schema Suicide.
-- **Problem:** Editing `~/.openclaw/openclaw.json` with invalid keys causes the gateway to restart in a tight loop. There is no safety net; founders watch "gateway restarting" forever.
+- **Problem:** Editing `~/.openclaw/openclaw.json` with invalid keys causes the gateway to restart in a tight loop. There is no safety net; operators watch "gateway restarting" forever.
 - **Standard definition:**
   1. Before applying any hot-reload, run a dry-run validator (`openclaw config lint --no-apply`).
   2. If validation fails, keep the previous config in memory, continue serving requests, and surface a blocking alert (Control UI, CLI, `openclaw doctor`).
@@ -30,11 +30,11 @@ These are the standards we want upstream OpenClaw to adopt. Each protocol turns 
   - CLI command `openclaw config apply` should accept `--dry-run` and `--revert-last` flags for deterministic recovery.
 - **Success criteria:**
   - No more gateway crash loops from syntax errors; the running config stays healthy.
-  - Control UI shows a red banner with the exact invalid path/value so a founder can fix it without tailing logs.
+  - Control UI shows a red banner with the exact invalid path/value so an operator can fix it without tailing logs.
 
 ## 3. Execution Path Integrity Protocol
 - **Origin:** Case 2 -- Docker Path Shadowing.
-- **Problem:** Founders often run `docker compose` from `~/.openclaw` (data dir) instead of the repo root where `docker-compose.yml` lives. Today this fails with `command not found` or cryptic mount errors.
+- **Problem:** Operators often run `docker compose` from `~/.openclaw` (data dir) instead of the repo root where `docker-compose.yml` lives. Today this fails with `command not found` or cryptic mount errors.
 - **Standard definition:**
   1. Whenever `openclaw docker <cmd>` or helper scripts detect the current working directory is inside `~/.openclaw`, abort and print the correct repo path (last cloned checkout or `OPENCLAW_REPO_PATH`).
   2. Provide an auto-navigation prompt: `Run cd ~/openclaw && docker compose ...? [Y/n]` with safe defaults.
@@ -48,7 +48,7 @@ These are the standards we want upstream OpenClaw to adopt. Each protocol turns 
   - Support docs can simply say "type `openclaw compose up`."
 
 ## 4. Visual Health Dashboard Protocol
-- **Origin:** Phase 2 feedback -- founders panic because install state is a black box (`health: starting`).
+- **Origin:** Field install feedback -- operators panic because install state is a black box (`health: starting`).
 - **Problem:** Current Control UI shows binary status (connected/disconnected). There is no shared view of Docker progress vs. Gateway readiness vs. API reachability.
 - **Standard definition:**
   1. Gateway must expose a `/health/graph` endpoint returning structured phases: Docker daemon, gateway process, auth status, API readiness, sandbox availability.
@@ -59,16 +59,16 @@ These are the standards we want upstream OpenClaw to adopt. Each protocol turns 
   - Extend Control UI with a compact "Visual Health" dock visible during onboarding and in Settings.
   - CLI fallback: `openclaw health --graph` prints ASCII bars.
 - **Success criteria:**
-  - Founders know exactly which layer is slow (Docker build vs. config validation vs. auth), reducing install anxiety.
+  - Operators know exactly which layer is slow (Docker build vs. config validation vs. auth), reducing install anxiety.
   - Support can ask for a screenshot of the dashboard instead of parsing logs.
 
 ---
 ### Patch -> native mapping
-| Protocol | Temporary patch (Phase 2 docs / Phase 4 scripts) | Native change (what upstream must implement) |
+| Protocol | Temporary patch (docs stopgap / tooling prototypes) | Native change (what upstream must implement) |
 | --- | --- | --- |
 | Credential Auto-Sync | Status Playbook + upcoming `auth-sync-check.sh` reminding users to copy/sync profiles. | Subagent bootstrap hook that hashes + auto-syncs `auth-profiles.json` before launch, with telemetry + doctor checks. |
-| Safe-Reload | Install guide tells users to run `jq` + `openclaw doctor` manually; Phase 4 will provide `config-lint.sh`. | Gateway watcher enforces dry-run + rollback, Control UI surfaces blocking alerts, CLI gains `--dry-run/--revert`. |
-| Execution Path Integrity | Docs warn about repo/data split; Phase 4 will ship a `claw-path-guard` shell snippet to detect `PWD`. | CLI + docker helpers detect misaligned `PWD`, auto navigate or block compose calls globally. |
+| Safe-Reload | Install guide tells users to run `jq` + `openclaw doctor` manually; a tooling prototype will provide `config-lint.sh`. | Gateway watcher enforces dry-run + rollback, Control UI surfaces blocking alerts, CLI gains `--dry-run/--revert`. |
+| Execution Path Integrity | Docs warn about repo/data split; the tooling prototype will ship a `claw-path-guard` shell snippet to detect `PWD`. | CLI + docker helpers detect misaligned `PWD`, auto navigate or block compose calls globally. |
 | Visual Health Dashboard | Clarity Layer + Status Playbook provide human-readable interpretations. | Gateway exposes a structured health graph API + Control UI/CLI renders realtime progress + stall hints. |
 
 ---

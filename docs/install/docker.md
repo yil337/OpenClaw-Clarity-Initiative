@@ -1,18 +1,18 @@
 ---
-summary: "Founder-focused addendum for Docker installs (Global Compass + status decoder)"
-title: "Docker -- Founder Install Clarity Addendum"
+summary: "Operator-focused addendum for Docker installs (Global Compass + status decoder)"
+title: "Docker -- Operator Install Safeguards"
 ---
 
-## Founder install clarity pack (Docker chapter add-on)
+## Operator install clarity pack (Docker chapter add-on)
 
 ### Note for Apple Silicon / M4 Users
-- **Run the Global Compass first:** Confirm Rosetta, free disk (>=15 GB), Docker Desktop running, and Terminal Full Disk Access (see [Global Compass](#founder-global-compass-pre-flight)).
+- **Run the Global Compass first:** Confirm Rosetta, free disk (>=15 GB), Docker Desktop running, and Terminal Full Disk Access (see [Global Compass](#operator-global-compass-pre-flight)).
 - **Wait for Docker to settle:** After updates the whale icon pulses for ~90 s--running compose before it stabilizes causes mount failures unique to M4 laptops.
 - **Protect the gateway from JSON typos:** Before editing `~/.openclaw/openclaw.json`, run a lint + backup step (`python3 -m json.tool <file>` / `jq` + temp file) so malformed configs never hit disk; if you prefer automation, refer to the forthcoming tooling PR that carries the experimental config-guard add-on.
 - **Keep subagent auth in sync:** Copy or symlink `~/.openclaw/auth-profiles.json` into each `~/.openclaw/agents/<name>/` directory right after the Docker step. This prevents the `No API key for provider "anthropic"` loop captured in [`raw_data/logs/auth_error_original.md`](../../raw_data/logs/auth_error_original.md).
 - **Bookmark the Status Decoder:** If you see `token mismatch` or `gateway restarting`, jump to the [Status decoder](#status-decoder-keep-nearby) table below--it translates every log referenced in this note.
 
-### Founder Global Compass (pre-flight)
+### Operator Global Compass (pre-flight)
 #### Apple Silicon (M1-M4)
 - [ ] Rosetta installed: `softwareupdate --install-rosetta --agree-to-license`.
 - [ ] Docker Desktop running with a steady whale icon; >=15 GB free disk.

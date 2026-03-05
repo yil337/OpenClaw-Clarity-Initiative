@@ -51,7 +51,7 @@ browser console: WebSocket close code 1008 -- token mismatch / expired
   ls docker-compose*.yml
   # If empty, you're not in the repo root.
   ```
-- **Dry-run config before hot reload** (manual stopgap until Phase 4 tool is ready)
+- **Dry-run config before hot reload** (manual stopgap until the automation tool ships)
   ```bash
   jq empty ~/.openclaw/openclaw.json && openclaw doctor --non-interactive
   ```

@@ -1,4 +1,4 @@
-# Auth & Config Failure Cases (Founder Notes)
+# Auth & Config Failure Cases (Operator Notes)
 
 ## Case 1: Subagent Auth Desync
 - **Phenomenon:** Root agent already has OpenAI configured, but the subagent still logs `No API key found for provider "anthropic"`.
@@ -12,7 +12,7 @@
 - **Phenomenon:** Editing `openclaw.json` sends the gateway into endless `gateway restarting` loops.
 - **Root Cause:** Putting the `approvals` key under `agents.defaults` triggers `Unrecognized key`; without lint/rollback the system crashes.
 
-### Log excerpts (Founder terminal captures)
+### Log excerpts (operator terminal captures)
 
 #### Connection Refused Loop
 ```
