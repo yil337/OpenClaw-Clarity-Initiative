@@ -1,29 +1,41 @@
-# Proposal: Docs-first path to unblock OpenClaw installs for founders
+# Issue: Phase 4 Docs-First Safety Net for Founder Installs
 
-Hi OpenClaw team,
+## Summary
+- **Persona:** Li Yidong — founder/operator running OpenClaw full time on an Apple Silicon (M4) laptop.
+- **Problem:** Fresh installs hit three structural blind spots that the current docs never warn about. Each pitfall is guaranteed to brick a new deployment even when the core software is healthy.
+- **Goal:** Land a docs-first pull request that codifies the mitigations while Phase 4 ships native enforcement (auth sync, config guard, path integrity, health dashboard).
 
-I’m Li Yidong — founder/operator and daily M4 laptop user — and I’ve been running your gateway full‑time to dogfood multi-agent workflows. After spending the entire morning onboarding fresh machines, three structural blind spots keep surfacing regardless of hardware or experience level:
+## Structural Blind Spots (with evidence)
 
-1. **Auth isolation between main agent and subagents** silently bricks every new subagent with `No API key for provider "anthropic"` even when the root config is perfect. Today the only fix is to manually diff hidden `auth-profiles.json` copies under `~/.openclaw/agents/*`.
-2. **Docker path shadowing** encourages users to run `docker compose` from `~/.openclaw` (because that’s where all generated files live), but the actual compose files sit in the repo checkout. The CLI happily runs commands in the wrong tree until bind mounts and socket paths explode.
-3. **Config hot-reload suicide** treats invalid edits to `~/.openclaw/openclaw.json` as fatal. A single misplaced key loops `gateway restarting` forever with no preserved last-known-good config.
+### 1. Subagent auth isolation silently desyncs credentials
+- **Observed behavior:** Subagents inherit stale `auth-profiles.json` snapshots under `~/.openclaw/agents/*`, producing `No API key for provider "anthropic"` the moment a new helper boots.
+- **Evidence:** `raw_data/logs/auth_error_original.md` → *Case 1: Subagent Auth Desync* (lines 4-8) captures the exact failure and path.
+- **Impact:** Every fresh subagent spawn fails regardless of the root config, forcing founders to spelunk hidden directories or retry installs they believe are broken.
+- **Requested remedy:** Ship a "Credential Auto-Sync Protocol" section in the docs plus a status checklist that tells users to hash-compare the per-agent `auth-profiles.json` files until the gateway performs the sync automatically.
 
-These aren’t niche “RTFM” bugs — they’re guaranteed landmines for any founder trying to put OpenClaw into production, and they can be solved at the standards/policy layer before touching code.
+### 2. Docker path shadowing trains users to run compose in the wrong tree
+- **Observed behavior:** The CLI encourages running `docker compose` from `~/.openclaw`, but the actual compose files remain in the repo checkout (e.g., `~/code/openclaw`). Running from the data directory produces `docker compose: not found` or mount explosions.
+- **Evidence:** `raw_data/logs/auth_error_original.md` → *Case 2: Docker Path Shadowing* (lines 10-15) documents the mismatch.
+- **Impact:** Install success becomes a coin flip because bind mounts break silently. Founders spend hours debugging Docker instead of onboarding agents.
+- **Requested remedy:** Update `/docs/install/docker.md` to spell out "repo root vs data root" with a guardrail snippet that bails if `pwd` equals `~/.openclaw`.
 
-## Proposed standards
-I drafted four lightweight protocols (see `docs/clarity-layer/protocols.md` in this repo) to turn those blind spots into deterministic behavior:
-- **Credential Auto-Sync Protocol** — subagents hash + auto-sync the main `auth-profiles.json` before booting.
-- **Safe-Reload Protocol** — gateway validates config changes before applying, and refuses to drop a healthy config when validation fails.
-- **Execution Path Integrity Protocol** — CLI and helper scripts detect when compose is run from `~/.openclaw` and steer the user back to the repo root instead of failing silently.
-- **Visual Health Dashboard Protocol** — surface a layered health graph (Docker → gateway → auth → sandbox) to kill the “health: starting” black box.
+### 3. Config hot-reload suicide bricks healthy gateways
+- **Observed behavior:** Editing `~/.openclaw/openclaw.json` with an unknown key loops `gateway restarting` forever. There is no lint or rollback hook.
+- **Evidence:** `raw_data/logs/auth_error_original.md` → *Case 3: JSON Schema Suicide* (lines 17-23) plus the connection-refused log excerpts below it.
+- **Impact:** One stray key nukes production; founders cannot recover without manual file surgery.
+- **Requested remedy:** Publish the Safe-Reload protocol (dry-run lint + limited backup history) while code work for `openclaw config lint` ships. The docs should instruct users to run `scripts/config-guard.sh` (from this repo) or equivalent before editing configs.
 
-None of these require new permissions or controversial UX shifts. They formalize what advanced operators already do manually (copy auth files, dry-run configs, remind themselves where compose lives, tail logs to guess readiness). I’m proposing a docs-first pull request that introduces these standards, plus companion guides that show the human workflow today while we align on native implementations.
+## Proposed Resolution (Docs-First)
+1. **Credential Auto-Sync Protocol** — add a dedicated section under "Auth" docs explaining the hash-compare workflow and pointing to the forthcoming automation plan.
+2. **Execution Path Integrity Protocol** — update Docker installation docs with repo/data split callouts, shell snippets, and pre-flight checks.
+3. **Safe-Reload Protocol** — incorporate the dry-run validator + rolling backup process into the install/operations docs, referencing the demo script included in this repo.
+4. **Visual Health Dashboard Protocol** — summarize the stacked status view so founders know how to interpret `gateway restarting`, `token mismatch`, etc.
 
-## What I’m asking for
-1. **Feedback on the four protocols** — are there edge cases the core maintainers want to cover before we upstream issue(s) and eventual patches?
-2. **Blessing for a Docs-First PR** — I have a scoped `INSTALL_GUIDE_ENHANCEMENT.md` ready that adds global pre-flight checklists, a status decoder, and explicit warnings about the three pitfalls above. Happy to submit this to `/docs/install/` as an initial pull request while we continue shaping the code-level changes.
-3. **A shared channel for implementation details** — once the standards are blessed, I’ll start drafting code patches (auth sync hook, config validator, CLI path guard, health graph endpoint) and route them as focused PRs instead of one giant diff.
+## Acceptance Criteria
+- Maintainers review and acknowledge the three blind spots as P0 doc issues.
+- Docs PR (referenced in this repo) is accepted or feedback is provided on structure/placement.
+- Follow-up code issues can reuse the same evidence so implementation owners are unblocked.
 
-Thanks for building OpenClaw — these polish layers will make the project feel as sharp as its underlying engine.
-
-— Li Yidong (@liyidong)
+## Links
+- Supporting logs: [`raw_data/logs/auth_error_original.md`](./raw_data/logs/auth_error_original.md)
+- Draft mitigation guides: `docs/clarity-layer/INSTALL_FOUNDERS.md`, `docs/clarity-layer/status-playbook.md`, `docs/clarity-layer/protocols.md`
