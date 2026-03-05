@@ -2,7 +2,7 @@
 
 ## Summary
 - **Persona:** Li Yidong — an M4 MacBook Air power user running OpenClaw full time to dogfood multi-agent workflows.
-- **Problem:** Fresh installs hit three structural blind spots that the current docs never warn about. Each pitfall is guaranteed to brick a new deployment even when the core software is healthy.
+- **Problem:** Fresh installs keep tripping over three “hidden gems” that already exist in official docs (FAQ 2288 等) but are buried too深。我们希望把它们显性化，而不是另起炉灶。
 - **Goal:** Land a docs-first pull request that codifies the mitigations while Phase 4 ships native enforcement (auth sync, config guard, path integrity, health dashboard).
 
 ## Visual comparison (official vs clarity layer)
@@ -27,13 +27,13 @@ Gateway status: healthy (linted via python3 -m json.tool)
 >> 状态剧本指向回滚命令，而不是重启地狱
 ```
 
-## Structural Blind Spots (with evidence)
+## Hidden Gems to Surface (with evidence)
 
 ### 1. Subagent auth isolation silently desyncs credentials
 - **Observed behavior:** Subagents inherit stale `auth-profiles.json` snapshots under `~/.openclaw/agents/*`, producing `No API key for provider "anthropic"` the moment a new helper boots.
 - **Evidence:** `raw_data/logs/auth_error_original.md` → *Case 1: Subagent Auth Desync* (lines 4-8) captures the exact failure and path.
 - **Impact:** Every fresh subagent spawn fails regardless of the root config, forcing founders to spelunk hidden directories or retry installs they believe are broken.
-- **Current official coverage:** `/app/docs/help/faq.md` ("No API key found for provider after adding a new agent") only offers a reactive fix: manually copy `auth-profiles.json` after the error occurs.
+- **Current official coverage:** `/app/docs/help/faq.md` ("No API key found for provider after adding a new agent") only提供一条事后补救：报错后手动复制 `auth-profiles.json`。它是个精品 hidden gem，但埋在 FAQ 深处。
 - **Gap:** No proactive warning or hash-sync workflow exists in install/onboarding docs, so founders repeatedly fall into the trap.
 - **Requested remedy:** Ship a "Credential Auto-Sync Protocol" section in the docs plus a status checklist that tells users to hash-compare the per-agent `auth-profiles.json` files until the gateway performs the sync automatically.
 
@@ -51,7 +51,7 @@ Gateway status: healthy (linted via python3 -m json.tool)
 - **Impact:** One stray key nukes production; founders cannot recover without manual file surgery.
 - **Current official coverage:** No current doc mentions linting `openclaw.json`, keeping rolling backups, or mapping `gateway restarting` loops to schema errors.
 - **Gap:** Founders have zero guidance once the loop starts; the only workaround is ad-hoc manual edits.
-- **Requested remedy:** Publish the Safe-Reload protocol (dry-run lint + limited backup history) while code work for `openclaw config lint` ships. Docs should walk users through native lint flows (`python3 -m json.tool`, `jq`, manual backup/restore). Experimental helpers (auth-sync, config-guard) live in our tooling repo and will be proposed separately once maintainers bless the docs.
+- **Requested remedy:** Publish the Safe-Reload protocol (dry-run lint + limited backup history) while code work for `openclaw config lint` ships. Docs should walk users through native lint flows (`python3 -m json.tool`, `jq`, manual backup/restore). Experimental helpers (auth-sync, config-guard) live in our tooling repo and will be proposed separately once maintainers bless the docs—we see them as a collaborative experiment with maintainers, not a fait accompli.
 
 ## Proposed Resolution (Docs-First)
 1. **Credential Auto-Sync Protocol** — add a dedicated section under "Auth" docs explaining the hash-compare workflow and pointing to the forthcoming automation plan.

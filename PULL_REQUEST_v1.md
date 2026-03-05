@@ -1,5 +1,7 @@
 # Pull Request Cover Letter — Phase 4 Docs Clarity
 
+> Dear OpenClaw maintainers — we deeply respect the rigor you’ve built into this project. This PR exists to take everyday support questions off your plate by codifying the proven install fixes founders already swap in community chats.
+
 ## Summary
 - Target repo: `openclaw/openclaw` docs tree.
 - Scope: documentation-only uplift (no code or runtime changes) to surface the Phase 4 Founder safeguards — Global Compass pre-flight, Status Decoder, Safe-Reload, and Docker path guardrails.
@@ -25,5 +27,5 @@
 - Status decoder reference: `docs/install/status-playbook.md`
 - Gap analysis appendix: `docs/install/official-gap-analysis.md`
 
-## Looking ahead (tooling teaser)
-- In parallel we prototyped auth-sync + config-guard scripts on a separate branch. Once these docs land and community feedback is positive, we’re ready to upstream the tooling as an opt-in Phase 5 experiment so the protocols evolve beyond documentation.
+## Looking ahead (collaborative experiment)
+- In parallel we prototyped auth-sync + config-guard scripts on a separate branch. Once these docs land and community feedback is positive, we’d love to co-design the tooling as a collaborative experiment—tuning safeguards together before locking anything into the gateway.
