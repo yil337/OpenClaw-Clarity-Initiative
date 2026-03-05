@@ -5,8 +5,8 @@ _Phase 1 (Repo initialization + pain capture) 已完成；下列阶段从 Phase 
 ## Phase 2 — Clarity Layer / Founder Install Journey
 - **目标**：把真实踩坑转化为「创始人式安装体验」，让新人能“看得见灯塔”。
 - **交付物**：
-  - `docs/clarity-layer/INSTALL_FOUNDERS.md`（创始人首小时体验、状态对照表、及时安抚文案）。
-  - 状态/日志词典：`docs/clarity-layer/status-playbook.md`（health: starting、gateway restarting 等）。
+  - `docs/install/founder-companion.md`（创始人首小时体验、状态对照表、及时安抚文案）。
+  - 状态/日志词典：`docs/install/status-playbook.md`（health: starting、gateway restarting 等）。
   - 结构化痛点速查：`raw_data/logs/` 持续补充现场案例。
 - **关键动作**：整理真实日志 → 场景化脚本 → 插入“预判 + 操作”提示。
 - **验收标准**：新人跟着文档可 0 依赖交互完成安装，遇到已知报错也能自救且心态稳定。
@@ -14,7 +14,7 @@ _Phase 1 (Repo initialization + pain capture) 已完成；下列阶段从 Phase 
 ## Phase 3 — From Patch to Protocol
 - **目标**：把我们临时补丁升级为官方应采纳的标准，形成 PR-ready 的论证。
 - **交付物**：
-  - `ROADMAP.md`（当前文件）+ `docs/clarity-layer/protocols.md`：列出每条“官方应采纳的标准”。
+  - `ROADMAP.md`（当前文件）+ `docs/install/phase4-protocols.md`：列出每条“官方应采纳的标准”。
   - 建议清单：Auth 自同步、路径指示、配置热校验、状态对照表等。
   - 每条建议附「我们已实现的临时方案」+「官方需要修改的点」。
 - **关键动作**：把真实案例映射到配置/脚本改动建议；准备对官方 repo 的 issue/PR 论据。

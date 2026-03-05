@@ -25,4 +25,4 @@ This file distills the Clarity Layer work into actionable chunks for `docs/insta
 - **Placement:** `/install/troubleshooting.md`.
 - **Content:** add the `curl -vk 127.0.0.1:18789/health`, `diff auth-profiles`, and `openclaw doctor --non-interactive` snippets pulled from Status Playbook.
 
-Each chunk references the same underlying standards defined in `docs/clarity-layer/protocols.md`, making it easy to cite when opening upstream issues/PRs.
+Each chunk references the same underlying standards defined in `docs/install/phase4-protocols.md`, making it easy to cite when opening upstream issues/PRs.

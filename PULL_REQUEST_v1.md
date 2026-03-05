@@ -5,6 +5,10 @@
 - Scope: documentation-only uplift (no code or runtime changes) to surface the Phase 4 Founder safeguards — Global Compass pre-flight, Status Decoder, Safe-Reload, and Docker path guardrails.
 - Intent: unblock official reviewers by presenting production evidence (raw founder logs) and ready-to-merge markdown modules that slot directly into `/docs/install/docker.md` and related guides. Risk profile is effectively zero because we only add narrative and callouts.
 
+## Maintenance assurance
+- The patch is intentionally decoupled from rapidly changing UI/CLI flows. It documents static path logic and auth store behavior that already exists in the FAQ (e.g., `/help/faq.md` line 2288) and installer steps, so upkeep is limited to structural changes—not screenshots or per-release strings.
+- Each section cites the upstream source of truth (FAQ, install/docker) so future edits by maintainers automatically surface in the same files we touch.
+
 ## Impact
 - Expected to cut foundational install errors by **≥50%** for new founders by making repo/data path boundaries, subagent auth sync, and config lint expectations explicit.
 - Reduces reviewer load: every structural blind spot is backed by concrete logs (`raw_data/logs/auth_error_original.md`) and mapped to actionable doc insertions, so no additional reproduction work is required.
@@ -17,6 +21,9 @@
 
 ## Attachments / References
 - Issue draft: `ISSUE_PROPOSAL.md`
-- Founder companion guide: `docs/clarity-layer/INSTALL_FOUNDERS.md`
+- Founder companion guide: `docs/install/founder-companion.md`
 - Drop-in Docker note: `docs/install/docker.md`
-- Gap analysis appendix: `docs/clarity-layer/official-gap-analysis.md`
+- Gap analysis appendix: `docs/install/official-gap-analysis.md`
+
+## Looking ahead (tooling teaser)
+- In parallel we prototyped auth-sync + config-guard scripts on a separate branch. Once these docs land and community feedback is positive, we’re ready to upstream the tooling as an opt-in Phase 5 experiment so the protocols evolve beyond documentation.

@@ -11,7 +11,7 @@ _This is the “friend on the next seat” companion to the official docs. It mi
 | Troubleshooting appendix | **Module 4 – Pain → Comfort Map** | Direct mapping between the three Phase 4 blind spots and their current mitigations. |
 | Doc callouts | **Module 5 – Drop-in Note for Apple Silicon/M4** | A ready-made paragraph that can be inserted immediately after the Docker section in `/docs/install/docker.md`. |
 
-Keep `docs/clarity-layer/status-playbook.md` open alongside this file; Module 3 only lists the beats you must surface inline in the upstream docs.
+Keep `docs/install/status-playbook.md` open alongside this file; Module 3 only lists the beats you must surface inline in the upstream docs.
 
 ---
 
@@ -77,7 +77,7 @@ Embed these bullets right after the official health table so founders know what 
 - `docker compose` errors when run inside `~/.openclaw` → you’re in the data directory, rerun from repo root.
 - `token mismatch / WebSocket 1008` → Control UI token expired; rerun `openclaw dashboard --no-open` to fetch a fresh token.
 
-For the full matrix, link to `docs/clarity-layer/status-playbook.md`.
+For the full matrix, link to `docs/install/status-playbook.md`.
 
 ---
 
@@ -94,8 +94,8 @@ For the full matrix, link to `docs/clarity-layer/status-playbook.md`.
 > ### Note for Apple Silicon / M4 Users
 > - Keep Docker Desktop open until the whale icon stops pulsing — Apple Silicon needs ~90 s after updates before bind mounts are reliable.
 > - Run the **Global Compass** checks first: Rosetta installed, ≥15 GB free disk, Terminal granted Full Disk Access.
-> - If the Control UI shows `gateway restarting`, do **not** rerun Docker. Run `scripts/config-guard.sh lint ~/.openclaw/openclaw.json` and consult the [Status Playbook](../clarity-layer/status-playbook.md) entry titled “Gateway loops after editing openclaw.json.”
+> - If the Control UI shows `gateway restarting`, do **not** rerun Docker. Run `scripts/config-guard.sh lint ~/.openclaw/openclaw.json` and consult the [Status Playbook](./status-playbook.md) entry titled “Gateway loops after editing openclaw.json.”
 > - Subagent credentials are isolated; after the Docker step, copy `~/.openclaw/auth-profiles.json` into each `~/.openclaw/agents/<name>/` directory or create a symlink so new agents don’t launch without keys.
-> - Keep the [Global Compass](../clarity-layer/INSTALL_FOUNDERS.md#module-1--global-compass-pre-flight) and [Status Decoder](../clarity-layer/INSTALL_FOUNDERS.md#module-3--status-decoder-mini-status-playbook) tabs open during install; they reflect the most recent founder-tested edge cases.
+> - Keep the [Global Compass](./founder-companion.md#module-1--global-compass-pre-flight) and [Status Decoder](./founder-companion.md#module-3--status-decoder-mini-status-playbook) tabs open during install; they reflect the most recent founder-tested edge cases.
 
 _Once maintainers approve, Modules 1, 3, and 5 can be inline-copied into the upstream `/docs/install/` tree, while Modules 2 and 4 stay here as the deep-dive appendix._

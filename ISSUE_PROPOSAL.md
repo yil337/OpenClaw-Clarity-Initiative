@@ -1,9 +1,16 @@
 # Issue: Phase 4 Docs-First Safety Net for Founder Installs
 
 ## Summary
-- **Persona:** Li Yidong — founder/operator running OpenClaw full time on an Apple Silicon (M4) laptop.
+- **Persona:** Li Yidong — an M4 MacBook Air power user running OpenClaw full time to dogfood multi-agent workflows.
 - **Problem:** Fresh installs hit three structural blind spots that the current docs never warn about. Each pitfall is guaranteed to brick a new deployment even when the core software is healthy.
 - **Goal:** Land a docs-first pull request that codifies the mitigations while Phase 4 ships native enforcement (auth sync, config guard, path integrity, health dashboard).
+
+## Visual comparison (official vs clarity layer)
+| 官方现状 | 注入后的体验 |
+| --- | --- |
+| FAQ 第 2288 行告诉你：等 `No API key found...` 报错后再手动拷贝 `auth-profiles.json`。 | 安装文档前置了“Credential Auto-Sync”步骤：spawn 子代理前先 hash 对比 / symlink，避免事后救火。 |
+| `/docs/install/docker.md` 在附录里轻描淡写一句 “docker compose 要在 repo root 跑”。 | Docker 主章节和快速开始都嵌入“Repo vs Data root”提示 + Shell guard snippet，防止误入 `~/.openclaw`。 |
+| `gateway restarting` 循环在官方文档没有任何释义。 | Status Decoder 把该日志明确标记为 “Config lint failure”，并附 rollback 步骤 + `config-guard.sh` 用法。 |
 
 ## Structural Blind Spots (with evidence)
 
@@ -44,4 +51,4 @@
 
 ## Links
 - Supporting logs: [`raw_data/logs/auth_error_original.md`](./raw_data/logs/auth_error_original.md)
-- Draft mitigation guides: `docs/clarity-layer/INSTALL_FOUNDERS.md`, `docs/clarity-layer/status-playbook.md`, `docs/clarity-layer/protocols.md`
+- Draft mitigation guides: `docs/install/founder-companion.md`, `docs/install/status-playbook.md`, `docs/install/phase4-protocols.md`
